@@ -2,6 +2,7 @@ package com.kimjesus.literalura.service;
 
 import com.kimjesus.literalura.model.Autor;
 import com.kimjesus.literalura.repository.AutorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,21 +10,10 @@ import java.util.List;
 @Service
 public class AutorService {
 
-    private final AutorRepository autorRepository;
+    @Autowired
+    private AutorRepository autorRepository;
 
-    public AutorService(AutorRepository autorRepository) {
-        this.autorRepository = autorRepository;
-    }
-
-    public List<Autor> listarAutores() {
-        return autorRepository.findAll();
-    }
-
-    public List<Autor> buscarAutoresVivosEn(int anio) {
-        return autorRepository.findAutoresVivosEn(anio);
-    }
-    public List<Autor> buscarAutorPorNombre(String nombre) {
-        return autorRepository.findByNombreContainingIgnoreCase(nombre);
+    public List<Autor> obtenerAutoresVivosEnAnio(int anio) {
+        return autorRepository.findAutoresVivosEnAnio(anio);
     }
 }
-
