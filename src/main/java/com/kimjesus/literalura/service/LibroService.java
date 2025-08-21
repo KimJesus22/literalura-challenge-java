@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 public class LibroService {
@@ -21,6 +22,10 @@ public class LibroService {
     public LibroService(LibroRepository libroRepository, AutorRepository autorRepository) {
         this.libroRepository = libroRepository;
         this.autorRepository = autorRepository;
+    }
+
+    public List<Libro> obtenerTodosLosLibros() {
+        return libroRepository.findAll();
     }
 
     /** Busca por título en Gutendex, guarda el primer resultado y lo devuelve. */
@@ -64,6 +69,6 @@ public class LibroService {
         libro.setNumeroDeDescargas(d.numeroDeDescargas());
         libro.setAutor(autor);
 
-        return libroRepository.save(libro);
+        return libroRepository.save(libro); // Devuelve el libro guardado
     }
 }

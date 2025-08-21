@@ -2,28 +2,37 @@ package com.kimjesus.literalura.controller;
 
 import com.kimjesus.literalura.model.Libro;
 import com.kimjesus.literalura.service.LibroService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/libros")
+@CrossOrigin // quítalo si sirves el HTML desde el mismo host
 public class LibroController {
 
     private final LibroService libroService;
-
     public LibroController(LibroService libroService) {
         this.libroService = libroService;
     }
 
-    @GetMapping("/buscar")
-    public String buscarYGuardarLibro(@RequestParam("titulo") String titulo) {
+    @GetMapping
+    public List<Libro> getAllLibros() {
+        return libroService.obtenerTodosLosLibros();
+    }
+
+    // NUEVO: buscar por título en Gutendex y guardar
+    @PostMapping("/buscar")
+    public Map<String, Object> buscarYGuardar(@RequestParam String titulo) {
         try {
-            Libro libro = libroService.buscarYGuardarPorTitulo(titulo);
-            return String.format("📘 Libro guardado: %s (%s)", libro.getTitulo(), libro.getAutor().getNombre());
+            Libro guardado = libroService.buscarYGuardarPorTitulo(titulo);
+            return Map.of(
+                "mensaje", "✅ Libro guardado",
+                "libro", guardado
+            );
         } catch (IllegalArgumentException e) {
-            return "Error: " + e.getMessage();
+            return Map.of("error", e.getMessage());
         }
     }
 }
