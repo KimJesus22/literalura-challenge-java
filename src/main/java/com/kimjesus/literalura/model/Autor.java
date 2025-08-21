@@ -42,4 +42,17 @@ public class Autor {
     public Integer getFechaFallecimiento() {
         return fechaFallecimiento;
     }
+
+    // Setters
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setFechaNacimiento(Integer fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public void setFechaFallecimiento(Integer fechaFallecimiento) {
+        this.fechaFallecimiento = fechaFallecimiento;
+    }
 }

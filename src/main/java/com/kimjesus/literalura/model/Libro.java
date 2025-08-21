@@ -23,24 +23,46 @@ public class Libro {
         this.numeroDeDescargas = datos.numeroDeDescargas();
         this.autor = new Autor(datos.autores().get(0));
     }
-    public Integer getNumeroDeDescargas() {
+
+    // Getters
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getIdioma() {
+        return idioma;
+    }
+
+    public int getNumeroDeDescargas() {
         return numeroDeDescargas;
     }
+
+    public Autor getAutor() {
+        return autor;
+    }
+
+    // Setters
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
+    }
+
+    public void setNumeroDeDescargas(int numeroDeDescargas) {
+        this.numeroDeDescargas = numeroDeDescargas;
+    }
+
+    public void setAutor(Autor autor) {
+        this.autor = autor;
+    }
+
     @Override
     public String toString() {
         return "📘 Libro: " + titulo +
                 ", Idioma: " + idioma +
                 ", Descargas: " + numeroDeDescargas +
-                ", Autor: " + autor.getNombre();
-    }
-    public String getTitulo() {
-        return titulo;
-    }
-    public String getIdioma() {
-        return idioma;
-    }
-
-    public Autor getAutor() {
-        return autor;
+                ", Autor: " + (autor != null ? autor.getNombre() : "Desconocido");
     }
 }
