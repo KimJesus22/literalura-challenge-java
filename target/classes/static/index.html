@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Literalura</title>
+</head>
+<body>
+
+<h1>Literalura</h1>
+
+<div>
+    <h2>Libros</h2>
+    <button id="fetch-libros">Buscar Todos los Libros</button>
+    <ul id="libros-list"></ul>
+</div>
+
+<div>
+    <h2>Autores Vivos</h2>
+    <input type="number" id="anio-input" placeholder="Introduce un año">
+    <button id="fetch-autores">Buscar Autores Vivos</button>
+    <ul id="autores-list"></ul>
+</div>
+
+<script>
+    document.getElementById('fetch-libros').addEventListener('click', () => {
+        fetch('/libros')
+            .then(response => response.json())
+            .then(data => {
+                const librosList = document.getElementById('libros-list');
+                librosList.innerHTML = '';
+                data.forEach(libro => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${libro.titulo} - ${libro.autor.nombre}`;
+                    librosList.appendChild(listItem);
+                });
+            });
+    });
+
+    document.getElementById('fetch-autores').addEventListener('click', () => {
+        const anio = document.getElementById('anio-input').value;
+        if (!anio) {
+            alert('Por favor, introduce un año.');
+            return;
+        }
+        fetch(`/autores/vivos?anio=${anio}`)
+            .then(response => response.json())
+            .then(data => {
+                const autoresList = document.getElementById('autores-list');
+                autoresList.innerHTML = '';
+                data.forEach(autor => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${autor.nombre} (${autor.fechaNacimiento} - ${autor.fechaFallecimiento || 'Presente'})`;
+                    autoresList.appendChild(listItem);
+                });
+            });
+    });
+</script>
+
+</body>
+</html>
