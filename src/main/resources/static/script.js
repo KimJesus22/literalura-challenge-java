@@ -64,3 +64,30 @@ document.getElementById('fetch-autores').addEventListener('click', () => {
             alert('No se pudieron cargar los autores.');
         });
 });
+
+// --- Nuevo código para buscar por título ---
+document.getElementById('btnBuscar').addEventListener('click', async () => {
+  const salida = document.getElementById('salida');
+  const titulo = document.getElementById('tituloInput').value.trim();
+  if (!titulo) { 
+    salida.textContent = 'Ingresa un título.'; 
+    return; 
+  }
+  salida.textContent = 'Buscando...';
+  try {
+    const res = await fetch(`/libros/buscar?titulo=${encodeURIComponent(titulo)}`, {
+      method: 'POST'
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      throw new Error(data.error || 'Error al guardar el libro.');
+    }
+    
+    const libro = data.libro;
+    const autor = libro.autor?.nombre ?? 'Desconocido';
+    salida.textContent = `${data.mensaje}: 📘 ${libro.titulo} | Idioma: ${libro.idioma} | Descargas: ${libro.numeroDeDescargas} | Autor: ${autor}`;
+  } catch (e) {
+    salida.textContent = '❌ ' + e.message;
+  }
+});
