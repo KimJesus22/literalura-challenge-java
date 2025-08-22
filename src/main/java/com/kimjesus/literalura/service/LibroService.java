@@ -90,6 +90,8 @@ public class LibroService {
     }
 
     public List<String> obtenerIdiomas() {
-        return libroRepository.findIdiomas();
+        return libroRepository.findIdiomas().stream()
+                .filter(idioma -> !idioma.equalsIgnoreCase("hu"))
+                .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    // Aplicar el tema guardado al cargar la página
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        body.classList.add(savedTheme);
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        });
+    }
+
     // --- Lógica existente ---
 
     document.getElementById('fetch-libros').addEventListener('click', () => {
@@ -77,16 +98,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cargar idiomas en el select
     const idiomaSelect = document.getElementById('idioma-select');
+    const idiomaMap = {
+        'en': 'Inglés',
+        'es': 'Español',
+        'fr': 'Francés',
+        'pt': 'Portugués'
+    };
+
     function cargarIdiomas() {
         fetch('/libros/idiomas')
             .then(response => response.json())
             .then(data => {
-                idiomaSelect.innerHTML = '';
+                idiomaSelect.innerHTML = '<option value="" disabled selected>Selecciona idioma</option>';
                 data.forEach(idioma => {
-                    const option = document.createElement('option');
-                    option.value = idioma;
-                    option.textContent = idioma;
-                    idiomaSelect.appendChild(option);
+                    if (idioma.toLowerCase() !== 'hu') { // Filtro adicional en el frontend
+                        const option = document.createElement('option');
+                        option.value = idioma;
+                        option.textContent = idiomaMap[idioma] || idioma;
+                        idiomaSelect.appendChild(option);
+                    }
                 });
             })
             .catch(error => console.error('Error al cargar idiomas:', error));
@@ -96,6 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Buscar libros por idioma
     document.getElementById('fetch-libros-idioma').addEventListener('click', () => {
         const idioma = idiomaSelect.value;
+        if (!idioma) {
+            alert('Por favor, selecciona un idioma.');
+            return;
+        }
         fetch(`/libros/idioma?idioma=${idioma}`)
             .then(response => response.json())
             .then(data => {
