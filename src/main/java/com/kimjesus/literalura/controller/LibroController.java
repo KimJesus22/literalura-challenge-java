@@ -36,4 +36,19 @@ public class LibroController {
             return Map.of("error", e.getMessage());
         }
     }
+
+    @GetMapping("/top10")
+    public List<LibroDTO> getTop10Libros() {
+        return libroService.obtenerTop10Libros();
+    }
+
+    @GetMapping("/idioma")
+    public List<LibroDTO> getLibrosPorIdioma(@RequestParam String idioma) {
+        return libroService.obtenerLibrosPorIdioma(idioma);
+    }
+
+    @GetMapping("/idiomas")
+    public List<String> getIdiomas() {
+        return libroService.obtenerIdiomas();
+    }
 }

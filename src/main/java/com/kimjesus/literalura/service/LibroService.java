@@ -76,4 +76,20 @@ public class LibroService {
         Libro libroGuardado = libroRepository.save(libro);
         return new LibroDTO(libroGuardado);
     }
+
+    public List<LibroDTO> obtenerTop10Libros() {
+        return libroRepository.findTop10ByOrderByNumeroDeDescargasDesc().stream()
+                .map(LibroDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<LibroDTO> obtenerLibrosPorIdioma(String idioma) {
+        return libroRepository.findByIdioma(idioma).stream()
+                .map(LibroDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> obtenerIdiomas() {
+        return libroRepository.findIdiomas();
+    }
 }
