@@ -1,93 +1,112 @@
-document.getElementById('fetch-libros').addEventListener('click', () => {
-    fetch('/libros')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const librosTableBody = document.querySelector('#libros-table tbody');
-            librosTableBody.innerHTML = ''; // Limpiar tabla anterior
-            data.forEach(libro => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${libro.titulo}</td>
-                    <td>${libro.autor.nombre}</td>
-                `;
-                librosTableBody.appendChild(row);
-            });
-        })
-        .catch(error => {
-            console.error('Error al buscar libros:', error);
-            alert('No se pudieron cargar los libros.');
-        });
-});
+document.addEventListener('DOMContentLoaded', () => {
 
-document.getElementById('fetch-autores').addEventListener('click', () => {
-    const anio = document.getElementById('anio-input').value;
-    if (!anio) {
-        alert('Por favor, introduce un año.');
-        return;
-    }
-    fetch(`/autores/vivos?anio=${anio}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const autoresTableBody = document.querySelector('#autores-table tbody');
-            autoresTableBody.innerHTML = ''; // Limpiar tabla anterior
-            if (data.length === 0) {
-                const row = document.createElement('tr');
-                const cell = document.createElement('td');
-                cell.colSpan = 3;
-                cell.textContent = 'No se encontraron autores vivos para el año especificado.';
-                row.appendChild(cell);
-                autoresTableBody.appendChild(row);
-            } else {
-                data.forEach(autor => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${autor.nombre}</td>
-                        <td>${autor.fechaNacimiento}</td>
-                        <td>${autor.fechaFallecimiento || 'Presente'}</td>
-                    `;
-                    autoresTableBody.appendChild(row);
+    // --- Lógica existente ---
+
+    document.getElementById('fetch-libros').addEventListener('click', () => {
+        fetch('/libros')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#libros-table tbody');
+                tableBody.innerHTML = '';
+                data.forEach(libro => {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `<td>${libro.titulo}</td><td>${libro.autor.nombre}</td>`;
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error al buscar autores:', error);
-            alert('No se pudieron cargar los autores.');
-        });
-});
-
-// --- Nuevo código para buscar por título ---
-document.getElementById('btnBuscar').addEventListener('click', async () => {
-  const salida = document.getElementById('salida');
-  const titulo = document.getElementById('tituloInput').value.trim();
-  if (!titulo) { 
-    salida.textContent = 'Ingresa un título.'; 
-    return; 
-  }
-  salida.textContent = 'Buscando...';
-  try {
-    const res = await fetch(`/libros/buscar?titulo=${encodeURIComponent(titulo)}`, {
-      method: 'POST'
+            })
+            .catch(error => console.error('Error al buscar libros:', error));
     });
-    const data = await res.json();
 
-    if (!res.ok || data.error) {
-      throw new Error(data.error || 'Error al guardar el libro.');
+    document.getElementById('fetch-autores').addEventListener('click', () => {
+        const anio = document.getElementById('anio-input').value;
+        if (!anio) {
+            alert('Por favor, introduce un año.');
+            return;
+        }
+        fetch(`/autores/vivos?anio=${anio}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#autores-table tbody');
+                tableBody.innerHTML = '';
+                data.forEach(autor => {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `<td>${autor.nombre}</td><td>${autor.fechaNacimiento}</td><td>${autor.fechaFallecimiento || 'Presente'}</td>`;
+                });
+            })
+            .catch(error => console.error('Error al buscar autores:', error));
+    });
+
+    document.getElementById('btnBuscar').addEventListener('click', async () => {
+        const salida = document.getElementById('salida');
+        const titulo = document.getElementById('tituloInput').value.trim();
+        if (!titulo) {
+            salida.textContent = 'Ingresa un título.';
+            return;
+        }
+        salida.textContent = 'Buscando...';
+        try {
+            const res = await fetch('/libros/buscar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ titulo: titulo })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.titulo || data.error || 'Error desconocido');
+            const libro = data.libro;
+            salida.textContent = `${data.mensaje}: 📘 ${libro.titulo} | Autor: ${libro.autor.nombre}`;
+        } catch (e) {
+            salida.textContent = '❌ ' + e.message;
+        }
+    });
+
+    // --- Nueva funcionalidad ---
+
+    // Cargar y mostrar el Top 10 de libros
+    document.getElementById('fetch-top10').addEventListener('click', () => {
+        fetch('/libros/top10')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#top10-table tbody');
+                tableBody.innerHTML = '';
+                data.forEach(libro => {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `<td>${libro.titulo}</td><td>${libro.autor.nombre}</td><td>${libro.numeroDeDescargas}</td>`;
+                });
+            })
+            .catch(error => console.error('Error al buscar el top 10 de libros:', error));
+    });
+
+    // Cargar idiomas en el select
+    const idiomaSelect = document.getElementById('idioma-select');
+    function cargarIdiomas() {
+        fetch('/libros/idiomas')
+            .then(response => response.json())
+            .then(data => {
+                idiomaSelect.innerHTML = '';
+                data.forEach(idioma => {
+                    const option = document.createElement('option');
+                    option.value = idioma;
+                    option.textContent = idioma;
+                    idiomaSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error al cargar idiomas:', error));
     }
-    
-    const libro = data.libro;
-    const autor = libro.autor?.nombre ?? 'Desconocido';
-    salida.textContent = `${data.mensaje}: 📘 ${libro.titulo} | Idioma: ${libro.idioma} | Descargas: ${libro.numeroDeDescargas} | Autor: ${autor}`;
-  } catch (e) {
-    salida.textContent = '❌ ' + e.message;
-  }
+    cargarIdiomas(); // Cargar al iniciar
+
+    // Buscar libros por idioma
+    document.getElementById('fetch-libros-idioma').addEventListener('click', () => {
+        const idioma = idiomaSelect.value;
+        fetch(`/libros/idioma?idioma=${idioma}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#libros-idioma-table tbody');
+                tableBody.innerHTML = '';
+                data.forEach(libro => {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `<td>${libro.titulo}</td><td>${libro.autor.nombre}</td>`;
+                });
+            })
+            .catch(error => console.error('Error al buscar libros por idioma:', error));
+    });
+
 });

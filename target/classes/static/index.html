@@ -33,6 +33,40 @@
 </div>
 
 <div>
+    <h2>Top 10 Libros Más Descargados</h2>
+    <button id="fetch-top10">Mostrar Top 10</button>
+    <table id="top10-table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Descargas</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Los datos del top 10 se insertarán aquí -->
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h2>Buscar Libros por Idioma</h2>
+    <select id="idioma-select"></select>
+    <button id="fetch-libros-idioma">Buscar</button>
+    <table id="libros-idioma-table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Los datos de los libros por idioma se insertarán aquí -->
+        </tbody>
+    </table>
+</div>
+
+<div>
     <h2>Autores Vivos en un Año Determinado</h2>
     <input type="number" id="anio-input" placeholder="Introduce un año">
     <button id="fetch-autores">Buscar Autores Vivos</button>
