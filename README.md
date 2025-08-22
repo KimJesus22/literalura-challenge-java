@@ -1,69 +1,47 @@
-# 📚 Literalura Challenge - Java con API REST
+# 📚✨🔎 Literalura Challenge
 
-Este proyecto es una aplicación web desarrollada en Java con Spring Boot. Expone una API REST para consultar información sobre libros y autores, y cuenta con un front-end sencillo para interactuar con ella.
+¡Bienvenido a Literalura! Una aplicación para explorar el mundo de los libros.
 
-## 🚀 Arquitectura
+📖 Descripción
+Literalura es una aplicación web que te permite buscar información sobre libros y autores utilizando la API de Gutendex. Puedes encontrar libros, ver los más descargados, filtrar por idioma y consultar qué autores estaban vivos en un determinado año.
 
-- **Backend:** API REST construida con Spring Boot y Spring Web.
-- **Persistencia:** Spring Data JPA con PostgreSQL.
-- **Frontend:** Una página HTML con JavaScript que consume la API REST.
+🌐 Vista en vivo
+¡Prueba la aplicación sin instalar nada!
 
-## 🌐 Endpoints de la API
+👉 [Demo en vivo](http://20.84.43.142/landing.html)
 
-- `GET /libros`
-  - Devuelve una lista de todos los libros almacenados en la base de datos.
+🚀 Características principales
+*   🔎 Búsqueda de libros: Encuentra libros por título o autor.
+*   🏆 Top 10: Descubre los 10 libros más descargados.
+*   🌐 Filtrado por idioma: Busca libros en español, inglés, francés y más.
+*   ✍️ Autores vivos: Consulta qué autores estaban vivos en un año específico.
+*   📈 Estadísticas: Visualiza datos sobre la cantidad de libros en la base de datos.
 
-- `GET /autores/vivos?anio=<año>`
-  - Devuelve una lista de autores que estaban vivos en el año especificado.
+🛠️ Tecnologías usadas
+*   Java 17+
+*   Spring Boot
+*   Spring Web (API REST)
+*   Spring Data JPA
+*   PostgreSQL
+*   Maven
+*   HTML5 y JavaScript
 
-## 🛠 Tecnologías utilizadas
-
-- Java 17+
-- Spring Boot
-- Spring Web (API REST)
-- Spring Data JPA
-- PostgreSQL
-- Maven
-- HTML5 y JavaScript (para el front-end)
-
-## 📂 Estructura del proyecto
-```
-src/
-└── main/
-    ├── java/
-    │   └── com.kimjesus.literalura
-    │       ├── controller/
-    │       ├── model/
-    │       ├── repository/
-    │       ├── service/
-    │       └── LiteraluraChallengeApplication.java
-    └── resources/
-        ├── static/
-        │   └── index.html
-        └── application.properties
-```
-
-## ▶️ Cómo ejecutar la aplicación
-
-1.  Clona el repositorio:
+▶️ Cómo ejecutar localmente
+1.  **Clona el repositorio:**
     ```bash
     git clone https://github.com/KimJesus22/literalura-challenge-java.git
     cd literalura-challenge-java
     ```
+2.  **Configura la base de datos:**
+    Abre el proyecto en tu IDE y actualiza el archivo `src/main/resources/application.properties` con tus credenciales de PostgreSQL.
+3.  **Ejecuta la aplicación:**
+    Inicia la clase principal `LiteraluraChallengeApplication.java`.
+4.  **¡Listo!**
+    Abre tu navegador y ve a `http://localhost:8080` para usar la aplicación.
 
-2.  Abre el proyecto en tu IDE favorito (IntelliJ recomendado).
-
-3.  Configura tu base de datos PostgreSQL y actualiza el archivo `src/main/resources/application.properties` con tus credenciales.
-
-4.  Ejecuta la clase principal: `LiteraluraChallengeApplication.java`.
-
-5.  ¡Listo! Abre tu navegador y ve a `http://localhost:8080` para interactuar con la aplicación.
-
-
-👨‍💻 **Autor**
-
+👨‍💻 Autor
 Desarrollado por Kim Jesus
 
-- GitHub: @KimJesus22
+*   GitHub: [@KimJesus22](https://github.com/KimJesus22)
 
 ¡Gracias por visitar el repositorio! ⭐
