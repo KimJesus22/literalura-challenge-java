@@ -1,5 +1,6 @@
 package com.kimjesus.literalura.service;
 
+import com.kimjesus.literalura.dto.LibroDTO;
 import com.kimjesus.literalura.model.*;
 import com.kimjesus.literalura.repository.AutorRepository;
 import com.kimjesus.literalura.repository.LibroRepository;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LibroService {
@@ -24,13 +26,15 @@ public class LibroService {
         this.autorRepository = autorRepository;
     }
 
-    public List<Libro> obtenerTodosLosLibros() {
-        return libroRepository.findAll();
+    public List<LibroDTO> obtenerTodosLosLibros() {
+        return libroRepository.findAll().stream()
+                .map(LibroDTO::new)
+                .collect(Collectors.toList());
     }
 
-    /** Busca por título en Gutendex, guarda el primer resultado y lo devuelve. */
+    /** Busca por título en Gutendex, guarda el primer resultado y lo devuelve como DTO. */
     @Transactional
-    public Libro buscarYGuardarPorTitulo(String tituloBuscado) {
+    public LibroDTO buscarYGuardarPorTitulo(String tituloBuscado) {
         if (libroRepository.existsByTituloIgnoreCase(tituloBuscado)) {
             throw new IllegalArgumentException("El libro ya está registrado.");
         }
@@ -69,6 +73,7 @@ public class LibroService {
         libro.setNumeroDeDescargas(d.numeroDeDescargas());
         libro.setAutor(autor);
 
-        return libroRepository.save(libro); // Devuelve el libro guardado
+        Libro libroGuardado = libroRepository.save(libro);
+        return new LibroDTO(libroGuardado);
     }
 }

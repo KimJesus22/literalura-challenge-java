@@ -1,6 +1,6 @@
 package com.kimjesus.literalura.controller;
 
-import com.kimjesus.literalura.model.Libro;
+import com.kimjesus.literalura.dto.LibroDTO;
 import com.kimjesus.literalura.service.LibroService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +18,14 @@ public class LibroController {
     }
 
     @GetMapping
-    public List<Libro> getAllLibros() {
+    public List<LibroDTO> getAllLibros() {
         return libroService.obtenerTodosLosLibros();
     }
 
-    // NUEVO: buscar por título en Gutendex y guardar
     @PostMapping("/buscar")
     public Map<String, Object> buscarYGuardar(@RequestParam String titulo) {
         try {
-            Libro guardado = libroService.buscarYGuardarPorTitulo(titulo);
+            LibroDTO guardado = libroService.buscarYGuardarPorTitulo(titulo);
             return Map.of(
                 "mensaje", "✅ Libro guardado",
                 "libro", guardado
