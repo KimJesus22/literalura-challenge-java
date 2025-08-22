@@ -1,7 +1,9 @@
 package com.kimjesus.literalura.controller;
 
+import com.kimjesus.literalura.dto.BusquedaLibroRequestDTO;
 import com.kimjesus.literalura.dto.LibroDTO;
 import com.kimjesus.literalura.service.LibroService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +25,9 @@ public class LibroController {
     }
 
     @PostMapping("/buscar")
-    public Map<String, Object> buscarYGuardar(@RequestParam String titulo) {
+    public Map<String, Object> buscarYGuardar(@Valid @RequestBody BusquedaLibroRequestDTO request) {
         try {
-            LibroDTO guardado = libroService.buscarYGuardarPorTitulo(titulo);
+            LibroDTO guardado = libroService.buscarYGuardarPorTitulo(request.titulo());
             return Map.of(
                 "mensaje", "✅ Libro guardado",
                 "libro", guardado

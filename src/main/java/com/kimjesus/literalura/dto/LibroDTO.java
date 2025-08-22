@@ -1,12 +1,17 @@
 package com.kimjesus.literalura.dto;
 
 import com.kimjesus.literalura.model.Libro;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record LibroDTO(
     Long id,
+    @NotBlank(message = "El título no puede estar vacío")
     String titulo,
+    @NotBlank(message = "El idioma no puede estar vacío")
     String idioma,
     int numeroDeDescargas,
+    @NotNull(message = "El autor no puede ser nulo")
     AutorDTO autor
 ) {
     public LibroDTO(Libro libro) {
