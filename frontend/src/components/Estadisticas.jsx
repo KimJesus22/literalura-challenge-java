@@ -3,9 +3,12 @@ import React, { useState, useEffect } from 'react';
 function Estadisticas() {
   const [estadisticas, setEstadisticas] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchEstadisticas = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await fetch('/libros/estadisticas');
         const data = await response.json();
@@ -16,6 +19,8 @@ function Estadisticas() {
         }
       } catch (err) {
         setError('Error al conectar con el servidor.');
+      } finally {
+        setLoading(false);
       }
     };
     fetchEstadisticas();
@@ -24,23 +29,26 @@ function Estadisticas() {
   return (
     <section>
       <h3>Estadísticas por Idioma</h3>
+      {loading && <p>Cargando...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>Idioma</th>
-            <th>Total de Libros</th>
-          </tr>
-        </thead>
-        <tbody>
-          {estadisticas.map((item) => (
-            <tr key={item.idioma}>
-              <td>{item.idioma}</td>
-              <td>{item.total}</td>
+      {!loading && !error && (
+        <table>
+          <thead>
+            <tr>
+              <th>Idioma</th>
+              <th>Total de Libros</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {estadisticas.map((item) => (
+              <tr key={item.idioma}>
+                <td>{item.idioma}</td>
+                <td>{item.total}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </section>
   );
 }

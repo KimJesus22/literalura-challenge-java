@@ -4,9 +4,11 @@ function BuscarLibro() {
   const [titulo, setTitulo] = useState('');
   const [mensaje, setMensaje] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setMensaje(null);
     setError(null);
 
@@ -26,8 +28,10 @@ function BuscarLibro() {
       }
     } catch (err) {
       setError('Error al conectar con el servidor.');
+    } finally {
+      setLoading(false);
+      setTitulo('');
     }
-    setTitulo('');
   };
 
   return (
@@ -40,8 +44,11 @@ function BuscarLibro() {
           onChange={(e) => setTitulo(e.target.value)}
           placeholder="Título del libro"
           required
+          disabled={loading}
         />
-        <button type="submit">Buscar y Guardar</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Buscando...' : 'Buscar y Guardar'}
+        </button>
       </form>
       {mensaje && <p style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}

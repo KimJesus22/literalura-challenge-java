@@ -5,9 +5,13 @@ function LibrosPorIdioma() {
   const [idiomaSeleccionado, setIdiomaSeleccionado] = useState('');
   const [libros, setLibros] = useState([]);
   const [error, setError] = useState(null);
+  const [loadingIdiomas, setLoadingIdiomas] = useState(false);
+  const [loadingLibros, setLoadingLibros] = useState(false);
 
   useEffect(() => {
     const fetchIdiomas = async () => {
+      setLoadingIdiomas(true);
+      setError(null);
       try {
         const response = await fetch('/libros/idiomas');
         const data = await response.json();
@@ -21,6 +25,8 @@ function LibrosPorIdioma() {
         }
       } catch (err) {
         setError('Error al conectar con el servidor.');
+      } finally {
+        setLoadingIdiomas(false);
       }
     };
     fetchIdiomas();
@@ -29,6 +35,8 @@ function LibrosPorIdioma() {
   useEffect(() => {
     if (idiomaSeleccionado) {
       const fetchLibrosPorIdioma = async () => {
+        setLoadingLibros(true);
+        setError(null);
         try {
           const response = await fetch(`/libros/idioma?idioma=${idiomaSeleccionado}`);
           const data = await response.json();
@@ -39,6 +47,8 @@ function LibrosPorIdioma() {
           }
         } catch (err) {
           setError('Error al conectar con el servidor.');
+        } finally {
+          setLoadingLibros(false);
         }
       };
       fetchLibrosPorIdioma();
@@ -48,37 +58,45 @@ function LibrosPorIdioma() {
   return (
     <section>
       <h3>Libros por Idioma</h3>
+      {loadingIdiomas && <p>Cargando idiomas...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <select
-        value={idiomaSeleccionado}
-        onChange={(e) => setIdiomaSeleccionado(e.target.value)}
-      >
-        {idiomas.map((idioma) => (
-          <option key={idioma} value={idioma}>
-            {idioma}
-          </option>
-        ))}
-      </select>
-      <table>
-        <thead>
-          <tr>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Idioma</th>
-            <th>Descargas</th>
-          </tr>
-        </thead>
-        <tbody>
-          {libros.map((libro) => (
-            <tr key={libro.id}>
-              <td>{libro.titulo}</td>
-              <td>{libro.autor.nombre}</td>
-              <td>{libro.idioma}</td>
-              <td>{libro.numeroDeDescargas}</td>
-            </tr>
+      {!loadingIdiomas && (
+        <select
+          value={idiomaSeleccionado}
+          onChange={(e) => setIdiomaSeleccionado(e.target.value)}
+          disabled={idiomas.length === 0}
+        >
+          {idiomas.map((idioma) => (
+            <option key={idioma} value={idioma}>
+              {idioma}
+            </option>
           ))}
-        </tbody>
-      </table>
+        </select>
+      )}
+
+      {loadingLibros && <p>Cargando libros...</p>}
+      {!loadingLibros && !error && (
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Idioma</th>
+              <th>Descargas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {libros.map((libro) => (
+              <tr key={libro.id}>
+                <td>{libro.titulo}</td>
+                <td>{libro.autor.nombre}</td>
+                <td>{libro.idioma}</td>
+                <td>{libro.numeroDeDescargas}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </section>
   );
 }

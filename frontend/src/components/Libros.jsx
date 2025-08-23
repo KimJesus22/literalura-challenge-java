@@ -3,9 +3,12 @@ import React, { useState, useEffect } from 'react';
 function Libros() {
   const [libros, setLibros] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchLibros = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await fetch('/libros');
         const data = await response.json();
@@ -16,6 +19,8 @@ function Libros() {
         }
       } catch (err) {
         setError('Error al conectar con el servidor.');
+      } finally {
+        setLoading(false);
       }
     };
     fetchLibros();
@@ -24,27 +29,30 @@ function Libros() {
   return (
     <section>
       <h3>Todos los Libros</h3>
+      {loading && <p>Cargando...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Idioma</th>
-            <th>Descargas</th>
-          </tr>
-        </thead>
-        <tbody>
-          {libros.map((libro) => (
-            <tr key={libro.id}>
-              <td>{libro.titulo}</td>
-              <td>{libro.autor.nombre}</td>
-              <td>{libro.idioma}</td>
-              <td>{libro.numeroDeDescargas}</td>
+      {!loading && !error && (
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Idioma</th>
+              <th>Descargas</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {libros.map((libro) => (
+              <tr key={libro.id}>
+                <td>{libro.titulo}</td>
+                <td>{libro.autor.nombre}</td>
+                <td>{libro.idioma}</td>
+                <td>{libro.numeroDeDescargas}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </section>
   );
 }
