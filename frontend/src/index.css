@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Definición de variables de color para los temas */
 .light-theme {
   --background-color: #f4f4f4;
