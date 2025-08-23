@@ -34,18 +34,34 @@ public class LibroControllerTest {
 
     @Test
     public void testGetAllLibros_ShouldReturnListOfBooks() throws Exception {
-        // Given: Preparamos los datos de prueba y el comportamiento del mock
+        // Given
         AutorDTO autorDTO = new AutorDTO("Tolkien, J. R. R.", 1892, 1973);
         LibroDTO libroDTO = new LibroDTO(1L, "El Señor de los Anillos", "es", 1500, autorDTO);
         List<LibroDTO> todosLosLibros = Collections.singletonList(libroDTO);
 
         when(libroService.obtenerTodosLosLibros()).thenReturn(todosLosLibros);
 
-        // When & Then: Ejecutamos la solicitud y verificamos la respuesta
+        // When & Then
         mockMvc.perform(get("/libros"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].titulo", is("El Señor de los Anillos")))
                 .andExpect(jsonPath("$[0].autor.nombre", is("Tolkien, J. R. R.")));
+    }
+
+    @Test
+    public void testGetTop10Libros_ShouldReturnTop10() throws Exception {
+        // Given
+        AutorDTO autorDTO = new AutorDTO("Tolkien, J. R. R.", 1892, 1973);
+        LibroDTO libroDTO = new LibroDTO(1L, "El Hobbit", "en", 2500, autorDTO);
+        List<LibroDTO> top10Libros = Collections.singletonList(libroDTO);
+
+        when(libroService.obtenerTop10Libros()).thenReturn(top10Libros);
+
+        // When & Then
+        mockMvc.perform(get("/libros/top10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].titulo", is("El Hobbit")));
     }
 }
