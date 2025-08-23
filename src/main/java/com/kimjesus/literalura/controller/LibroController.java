@@ -5,6 +5,8 @@ import com.kimjesus.literalura.dto.EstadisticasIdiomaDTO;
 import com.kimjesus.literalura.dto.LibroDTO;
 import com.kimjesus.literalura.service.LibroService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +14,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/libros")
-@CrossOrigin // quítalo si sirves el HTML desde el mismo host
 public class LibroController {
 
     private final LibroService libroService;
@@ -26,16 +27,13 @@ public class LibroController {
     }
 
     @PostMapping("/buscar")
-    public Map<String, Object> buscarYGuardar(@Valid @RequestBody BusquedaLibroRequestDTO request) {
-        try {
-            LibroDTO guardado = libroService.buscarYGuardarPorTitulo(request.titulo());
-            return Map.of(
-                "mensaje", "✅ Libro guardado",
-                "libro", guardado
-            );
-        } catch (IllegalArgumentException e) {
-            return Map.of("error", e.getMessage());
-        }
+    public ResponseEntity<Map<String, Object>> buscarYGuardar(@Valid @RequestBody BusquedaLibroRequestDTO request) {
+        LibroDTO guardado = libroService.buscarYGuardarPorTitulo(request.titulo());
+        Map<String, Object> response = Map.of(
+            "mensaje", "✅ Libro guardado",
+            "libro", guardado
+        );
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/top10")
