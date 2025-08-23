@@ -32,22 +32,14 @@ function Estadisticas() {
       {loading && <p>Cargando...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {!loading && !error && (
-        <table>
-          <thead>
-            <tr>
-              <th>Idioma</th>
-              <th>Total de Libros</th>
-            </tr>
-          </thead>
-          <tbody>
-            {estadisticas.map((item) => (
-              <tr key={item.idioma}>
-                <td>{item.idioma}</td>
-                <td>{item.total}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="stats-container">
+          {estadisticas.map((item) => (
+            <div key={item.idioma} className="stat-card">
+              <span className="stat-value">{item.total}</span>
+              <span className="stat-label">Libros en {item.idioma}</span>
+            </div>
+          ))}
+        </div>
       )}
     </section>
   );
