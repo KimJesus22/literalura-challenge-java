@@ -20,7 +20,7 @@ COPY --from=frontend /app/frontend/dist /app/src/main/resources/static
 RUN chmod +x ./mvnw
 
 # Compilar el proyecto (usando wrapper)
-RUN ./mvnw package -DskipTests
+RUN ./mvnw package -Dmaven.test.skip=true
 
 # Exponer el puerto que Spring Boot usa por defecto
 EXPOSE 8080
