@@ -1,5 +1,6 @@
 package com.kimjesus.literalura.service;
 
+import com.kimjesus.literalura.dto.EstadisticasIdiomaDTO;
 import com.kimjesus.literalura.dto.LibroDTO;
 import com.kimjesus.literalura.model.*;
 import com.kimjesus.literalura.repository.AutorRepository;
@@ -93,5 +94,9 @@ public class LibroService {
         return libroRepository.findIdiomas().stream()
                 .filter(idioma -> !idioma.equalsIgnoreCase("hu"))
                 .collect(Collectors.toList());
+    }
+
+    public List<EstadisticasIdiomaDTO> obtenerEstadisticasPorIdioma() {
+        return libroRepository.countLibrosPorIdioma();
     }
 }

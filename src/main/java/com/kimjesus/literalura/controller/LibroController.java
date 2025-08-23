@@ -1,6 +1,7 @@
 package com.kimjesus.literalura.controller;
 
 import com.kimjesus.literalura.dto.BusquedaLibroRequestDTO;
+import com.kimjesus.literalura.dto.EstadisticasIdiomaDTO;
 import com.kimjesus.literalura.dto.LibroDTO;
 import com.kimjesus.literalura.service.LibroService;
 import jakarta.validation.Valid;
@@ -50,5 +51,10 @@ public class LibroController {
     @GetMapping("/idiomas")
     public List<String> getIdiomas() {
         return libroService.obtenerIdiomas();
+    }
+
+    @GetMapping("/estadisticas")
+    public List<EstadisticasIdiomaDTO> getEstadisticas() {
+        return libroService.obtenerEstadisticasPorIdioma();
     }
 }
