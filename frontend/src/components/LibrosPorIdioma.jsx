@@ -9,7 +9,7 @@ function LibrosPorIdioma() {
   useEffect(() => {
     const fetchIdiomas = async () => {
       try {
-        const response = await fetch('http://localhost:8080/libros/idiomas');
+        const response = await fetch('/libros/idiomas');
         const data = await response.json();
         if (response.ok) {
           setIdiomas(data);
@@ -30,7 +30,7 @@ function LibrosPorIdioma() {
     if (idiomaSeleccionado) {
       const fetchLibrosPorIdioma = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/libros/idioma?idioma=${idiomaSeleccionado}`);
+          const response = await fetch(`/libros/idioma?idioma=${idiomaSeleccionado}`);
           const data = await response.json();
           if (response.ok) {
             setLibros(data);

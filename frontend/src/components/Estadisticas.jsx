@@ -7,7 +7,7 @@ function Estadisticas() {
   useEffect(() => {
     const fetchEstadisticas = async () => {
       try {
-        const response = await fetch('http://localhost:8080/libros/estadisticas');
+        const response = await fetch('/libros/estadisticas');
         const data = await response.json();
         if (response.ok) {
           setEstadisticas(data);

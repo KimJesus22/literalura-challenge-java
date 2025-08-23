@@ -11,7 +11,7 @@ function BuscarLibro() {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8080/libros/buscar', {
+      const response = await fetch('/libros/buscar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

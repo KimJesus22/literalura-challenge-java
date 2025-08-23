@@ -7,7 +7,7 @@ function Top10Libros() {
   useEffect(() => {
     const fetchTop10Libros = async () => {
       try {
-        const response = await fetch('http://localhost:8080/libros/top10');
+        const response = await fetch('/libros/top10');
         const data = await response.json();
         if (response.ok) {
           setLibros(data);

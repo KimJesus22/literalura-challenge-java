@@ -10,7 +10,7 @@ function AutoresVivos() {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/autores/vivos?anio=${anio}`);
+      const response = await fetch(`/autores/vivos?anio=${anio}`);
       const data = await response.json();
       if (response.ok) {
         setAutores(data);
