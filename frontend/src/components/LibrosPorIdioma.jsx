@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getLanguageName } from '../utils/languageUtils.js';
 
 function LibrosPorIdioma() {
   const [idiomas, setIdiomas] = useState([]);
@@ -68,7 +69,7 @@ function LibrosPorIdioma() {
         >
           {idiomas.map((idioma) => (
             <option key={idioma} value={idioma}>
-              {idioma}
+              {getLanguageName(idioma)}
             </option>
           ))}
         </select>
@@ -90,7 +91,7 @@ function LibrosPorIdioma() {
               <tr key={libro.id}>
                 <td>{libro.titulo}</td>
                 <td>{libro.autor.nombre}</td>
-                <td>{libro.idioma}</td>
+                <td>{getLanguageName(libro.idioma)}</td>
                 <td>{libro.numeroDeDescargas}</td>
               </tr>
             ))}

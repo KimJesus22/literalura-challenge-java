@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getLanguageName } from '../utils/languageUtils.js';
 
 function Estadisticas() {
   const [estadisticas, setEstadisticas] = useState([]);
@@ -36,7 +37,7 @@ function Estadisticas() {
           {estadisticas.map((item) => (
             <div key={item.idioma} className="stat-card">
               <span className="stat-value">{item.total}</span>
-              <span className="stat-label">Libros en {item.idioma}</span>
+              <span className="stat-label">Libros en {getLanguageName(item.idioma)}</span>
             </div>
           ))}
         </div>
